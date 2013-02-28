@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Geo Location</title>
+        <!--
+          if the location is coming from your device or you are using HTML5 use false else use true.
+        -->
+        <style>
+        	#out{
+        		width: 600px;
+        		height: 600px;
+        	}
+        </style>
+        <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script>
+        	window.onload = init;
+        	function init(){
+        	if(navigator.geolocation){
+        	//	if(navigator.geolocation){
+        			navigator.geolocation.getCurrentPosition(successFun, FailFun)
+        		}else{
+        			alert("not found...")
+        		}
+        	}
+        	function successFun(position){
+        	var out = document.getElementById("out")
+        	var map = new google.maps.Map(out);
+        		// mapTypeId: google.maps.MapTypeId.ROADMAP
+        		// mapTypeId: google.maps.MapTypeId.TERRAIN
+        		// mapTypeId: google.maps.MapTypeId.SATELLITE
+        		/*
+        		 */
+        		var lat = position.coords.latitude;
+        		var lon = position.coords.longitude;
+        		var mapOptions = {
+								    center: new google.maps.LatLng(lat, lon),
+								    zoom: 14,
+								    mapTypeId: google.maps.MapTypeId.ROADMAP
+								  }
+				new google.maps.Map(out, mapOptions);
+				
+				var markerOption = {
+					position : new google.maps.LatLng(lat, lon),
+					
+				}
+				var marker = new google.maps.Marker(markerOption);
+				marker.setMap(map);
+				// mapOptions.showFun();
+        		
+        		// map.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+        	}
+        		// alert("Longitude : "+position.coords.longitude+" | Latitude : "+position.coords.latitude)
+        		
+        		/*
+        		var latitude = position.coords.latitude;
+		        var longitude = position.coords.longitude;
+		        document.getElementById("out").innerHTML = "Latitude is "+latitude+", longitude is "+longitude+"<br /><br />";
+		 
+		        var myImage = new Image;
+		        myImage.src = "http://maps.googleapis.com/maps/api/staticmap?center="+latitude+","+longitude+"&zoom=16&size=300x300&sensor=false";
+		        document.getElementById('out').appendChild(myImage);
+		        myImage.align = "";
+		        	}
+        		 */
+		        	function FailFun(err){
+		        		alert(err.code)
+		        	}
+        		
+        </script>
+    </head>
+    <body>
+        <h1>Geo Location API</h1>
+        <div id="out"></div>
+    </body>
+</html>
