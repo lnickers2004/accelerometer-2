@@ -2,75 +2,66 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Geo Location</title>
-        <!--
-          if the location is coming from your device or you are using HTML5 use false else use true.
-        -->
+        <title>Canvas API</title>
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="script/excanvas.js"></script>
+		<![endif]-->
         <style>
-        	#out{
-        		width: 600px;
-        		height: 600px;
+        	canvas{
+        		border: 2px dashed gray;
         	}
         </style>
-        <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script>
-        	window.onload = init;
-        	function init(){
-        	if(navigator.geolocation){
-        	//	if(navigator.geolocation){
-        			navigator.geolocation.getCurrentPosition(successFun, FailFun)
-        		}else{
-        			alert("not found...")
-        		}
+        var can, ctx;
+        var boxD = 50;
+        var boxX = 0;
+        var boxY = 200;
+        var count = 0;
+        var si;
+        	function onLoadFun(){
+			can = document.getElementById("can");
+			ctx = can.getContext("2d");
+			
+			/*
+			
+			// ctx.arc(x,y,radius,start position, end position, counter clockwise)
+			ctx.arc(100,100,60,(Math.PI/180)*0,(Math.PI/180)*90, false);
+			ctx.fill();
+			ctx.closePath();
+			ctx.stroke();
+			// ctx.stroke();
+			 */
+			si = setInterval(animate,1);
+			
         	}
-        	function successFun(position){
-        	var out = document.getElementById("out")
-        	var map = new google.maps.Map(out);
-        		// mapTypeId: google.maps.MapTypeId.ROADMAP
-        		// mapTypeId: google.maps.MapTypeId.TERRAIN
-        		// mapTypeId: google.maps.MapTypeId.SATELLITE
-        		/*
-        		 */
-        		var lat = position.coords.latitude;
-        		var lon = position.coords.longitude;
-        		var mapOptions = {
-								    center: new google.maps.LatLng(lat, lon),
-								    zoom: 14,
-								    mapTypeId: google.maps.MapTypeId.ROADMAP
-								  }
-				new google.maps.Map(out, mapOptions);
+        	function animate(){
+        		// ctx.clearRect(0,0,300,300);
+        		var r = Math.round(Math.random()*255);
+        		var g = Math.round(Math.random()*255);
+        		var b = Math.round(Math.random()*255);
+        		var a = Math.random();
+        		var rgba = "rgba("+r+","+g+","+b+","+a+")";
+        		ctx.fillStyle = rgba;
+        		ctx.fillRect(boxX,boxY,boxD,boxD)
+				boxX++;
+				count++;
 				
-				var markerOption = {
-					position : new google.maps.LatLng(lat, lon),
-					
+				boxD = Math.round(Math.random()*50);
+				boxX = Math.round(Math.random()*300);
+				boxY = Math.round(Math.random()*300);
+				
+				document.getElementById("display").textContent = count;
+				if(count == 1000){
+					clearInterval(si);
 				}
-				var marker = new google.maps.Marker(markerOption);
-				marker.setMap(map);
-				// mapOptions.showFun();
-        		
-        		// map.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
         	}
-        		// alert("Longitude : "+position.coords.longitude+" | Latitude : "+position.coords.latitude)
-        		
-        		/*
-        		var latitude = position.coords.latitude;
-		        var longitude = position.coords.longitude;
-		        document.getElementById("out").innerHTML = "Latitude is "+latitude+", longitude is "+longitude+"<br /><br />";
-		 
-		        var myImage = new Image;
-		        myImage.src = "http://maps.googleapis.com/maps/api/staticmap?center="+latitude+","+longitude+"&zoom=16&size=300x300&sensor=false";
-		        document.getElementById('out').appendChild(myImage);
-		        myImage.align = "";
-		        	}
-        		 */
-		        	function FailFun(err){
-		        		alert(err.code)
-		        	}
-        		
         </script>
     </head>
-    <body>
-        <h1>Geo Location API</h1>
-        <div id="out"></div>
+    <body onload="onLoadFun()">
+    	<!-- text images custom shapes and videos -->
+		<canvas id="can" width="300" height="300">
+			<img src="images/batman.jpg" />
+		</canvas>
+		<h1 id="display"></h1>
     </body>
 </html>
